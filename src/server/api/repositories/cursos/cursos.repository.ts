@@ -17,8 +17,16 @@ export const getAllCursos = async (ctx: { db: PrismaClient }, input: InputGetAll
     ctx.db.curso.findMany({
       include: {
         materia: true,
-        ayudanteUser: true,
-        profesorUser: true,
+        ayudantes: {
+          include: {
+            usuario: true,
+          },
+        } ,
+        profesores: {
+          include: {
+            usuario: true,
+          },
+        },
         division: true,
         sede: true,
       },
