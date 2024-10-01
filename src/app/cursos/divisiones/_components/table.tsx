@@ -4,19 +4,18 @@ import { DataTable } from "@/components/ui"; // Asegúrate de que esto sea corre
 import { type RouterOutputs } from "@/trpc/react"; // Asegúrate de que esto sea correcto
 import { type z } from "zod";
 import { DataTablePaginationStandalone } from "@/components/ui/table/table-pagination-standalone";
-//import { useDivisionesQueryParam } from "../_hooks/use-divisiones-query-param"; // Crea este hook si lo necesitas
-import { getColumns } from "./columns"; // Crea columnas si es necesario
+import { getColumns } from "./columns"; // Asegúrate de definir las columnas para divisiones
 import { type SortingState } from "@tanstack/react-table";
+import RemoveDivisionModal from "./remove-division";
+
 type DivisionData = RouterOutputs["division"]["getAll"]; // Cambia esto según tu API
 
 type DivisionesTableProps = {
   data: DivisionData;
+  refresh: () => void; // Asegúrate de recibir la función refresh como prop
 };
 
-export const DivisionesTable = ({ data }: DivisionesTableProps) => {
-  // Comentado ya que no lo estás utilizando actualmente
-  // const { refresh, pagination, sorting, onSortingChange, onPaginationChange } = useDivisionesQueryParam();
-
+export const DivisionesTable = ({ data, refresh }: DivisionesTableProps) => {
   const columns = getColumns(); // Asegúrate de definir las columnas para divisiones
 
   return (
@@ -25,11 +24,9 @@ export const DivisionesTable = ({ data }: DivisionesTableProps) => {
         data={data ?? []} // Asegúrate de que data sea la lista de divisiones
         columns={columns}
         manualSorting // Mantén esto si necesitas ordenamiento manual
-        // Configuración de paginación y ordenamiento (ajusta según tus necesidades)
         pageSize={10} // Cambia esto a pagination.pageSize si usas paginación
         pageIndex={0} // Cambia esto a pagination.pageIndex si usas paginación
         config={{
-          // Cambia esto si no estás usando un estado de ordenamiento
           sorting: [], // Reemplaza con el estado de ordenamiento si lo utilizas
           onSortingChange: (updaterOrValue: SortingState | ((prevState: SortingState) => SortingState)) =>
             typeof updaterOrValue === "function" ? updaterOrValue([]) : updaterOrValue,
@@ -41,7 +38,7 @@ export const DivisionesTable = ({ data }: DivisionesTableProps) => {
               <>
                 {/* Aquí puedes agregar botones o acciones relacionadas con la división */}
                 <button className="text-blue-500 hover:underline">Editar</button>
-                <button className="text-red-500 hover:underline">Eliminar</button>
+                <RemoveDivisionModal divisionId={original.id} nombre={original.nombre} onSubmit={refresh} />
               </>
             );
           },

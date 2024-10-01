@@ -24,7 +24,7 @@ export const inputGetDivision = z.object({
 });
 
 // Esquema para eliminar una división
-export const inputEliminarDivision = inputGetDivision;
+export const inputEliminarDivision = z.object({ id: z.number() });
 
 // Esquema para editar una división (combina el agregar con un id opcional)
 export const inputEditarDivision = z
