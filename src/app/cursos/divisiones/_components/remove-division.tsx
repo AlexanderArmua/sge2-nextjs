@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { TrashIcon } from "lucide-react";
-
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui";
 import { toast } from "@/components/ui";
 import { api } from "@/trpc/react"; // Asegúrate de que esta ruta sea correcta
@@ -15,10 +15,12 @@ type RemoveDivisionModalProps = {
 };
 
 export default function RemoveDivisionModal({ divisionId, nombre, onSubmit }: RemoveDivisionModalProps) {
+  const router = useRouter();
   const eliminarDivision = api.division.eliminarDivision.useMutation({
     onSuccess: () => {
       toast.success(`La división ${nombre} se eliminó con éxito.`);
-      onSubmit?.(); // Llama al callback proporcionado
+      onSubmit?.();
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error?.message ?? `Error eliminando la división ${nombre}`);
