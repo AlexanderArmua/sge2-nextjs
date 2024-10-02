@@ -134,6 +134,11 @@ export const CURSOS_ROUTE: AppRoute = {
       label: "Mis cursos",
       isPublic: false,
     },
+    {
+      href: "/cursos/divisiones",
+      label: "Divisiones",
+      isPublic: false,
+    },
   ],
 };
 

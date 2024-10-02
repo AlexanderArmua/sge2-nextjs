@@ -7,6 +7,7 @@ import { DataTablePaginationStandalone } from "@/components/ui/table/table-pagin
 import { getColumns } from "./columns"; // Asegúrate de definir las columnas para divisiones
 import { type SortingState } from "@tanstack/react-table";
 import RemoveDivisionModal from "./remove-division";
+import EditDivisionModal from "./edit-division";
 
 type DivisionData = RouterOutputs["division"]["getAll"]; // Cambia esto según tu API
 
@@ -37,7 +38,7 @@ export const DivisionesTable = ({ data, refresh }: DivisionesTableProps) => {
             return (
               <>
                 {/* Aquí puedes agregar botones o acciones relacionadas con la división */}
-                <button className="text-blue-500 hover:underline">Editar</button>
+                <EditDivisionModal divisionId={original.id} />
                 <RemoveDivisionModal divisionId={original.id} nombre={original.nombre} onSubmit={refresh} />
               </>
             );

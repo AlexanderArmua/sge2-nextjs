@@ -3,6 +3,7 @@ import { z } from "zod";
 // Esquema para agregar una división
 export const inputAgregarDivision = z.object({
   nombre: z.string().min(1, { message: "El nombre es requerido" }),
+  anio: z.number(),
 });
 
 // Esquema para obtener todas las divisiones con paginación y filtros
@@ -30,5 +31,7 @@ export const inputEliminarDivision = z.object({ id: z.number() });
 export const inputEditarDivision = z
   .object({
     id: z.number().optional(), // Si viene significa que se va a usar para editar, si no significa que se va a usar para crear
+    nombre: z.string(),
+    anio: z.number().optional(), // Hazlo opcional si no siempre se proporciona
   })
   .merge(inputAgregarDivision);
