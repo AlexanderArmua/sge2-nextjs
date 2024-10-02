@@ -2,7 +2,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { api } from "@/trpc/react";
 import { Button, FormInput, ScrollArea, toast } from "@/components/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { inputEditarDivision } from "@/shared/filters/divisiones-filter.schema"; // Reemplazar con el schema adecuado
+import { inputEditarDivision, inputAgregarDivision } from "@/shared/filters/divisiones-filter.schema"; // Reemplazar con el schema adecuado
 import { type z } from "zod";
 import { useEffect, useMemo } from "react";
 
@@ -39,7 +39,7 @@ export const DivisionForm = ({ id, onSubmit, onCancel }: Props) => {
   const formHook = useForm<FormEditarDivisionType>({
     mode: "onChange",
     defaultValues: divisionBase,
-    resolver: zodResolver(inputEditarDivision),
+    resolver: zodResolver(id ? inputEditarDivision : inputAgregarDivision),
   });
 
   const { handleSubmit, control, watch } = formHook;

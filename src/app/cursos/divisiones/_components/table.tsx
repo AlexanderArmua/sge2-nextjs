@@ -8,30 +8,24 @@ import { getColumns } from "./columns"; // Asegúrate de definir las columnas pa
 import { type SortingState } from "@tanstack/react-table";
 import RemoveDivisionModal from "./remove-division";
 import EditDivisionModal from "./edit-division";
-
+import { useRouter } from "next/navigation";
 type DivisionData = RouterOutputs["division"]["getAll"]; // Cambia esto según tu API
 
 type DivisionesTableProps = {
   data: DivisionData;
-  refresh: () => void; // Asegúrate de recibir la función refresh como prop
 };
 
-export const DivisionesTable = ({ data, refresh }: DivisionesTableProps) => {
+export const DivisionesTable = ({ data }: DivisionesTableProps) => {
   const columns = getColumns(); // Asegúrate de definir las columnas para divisiones
-
+  const router = useRouter();
+  const onDeleteDivision = () => {
+    router.refresh();
+  };
   return (
     <>
       <DataTable
         data={data ?? []} // Asegúrate de que data sea la lista de divisiones
         columns={columns}
-        manualSorting // Mantén esto si necesitas ordenamiento manual
-        pageSize={10} // Cambia esto a pagination.pageSize si usas paginación
-        pageIndex={0} // Cambia esto a pagination.pageIndex si usas paginación
-        config={{
-          sorting: [], // Reemplaza con el estado de ordenamiento si lo utilizas
-          onSortingChange: (updaterOrValue: SortingState | ((prevState: SortingState) => SortingState)) =>
-            typeof updaterOrValue === "function" ? updaterOrValue([]) : updaterOrValue,
-        }}
         action={{
           header: "Acciones",
           cell({ original }) {
@@ -39,21 +33,10 @@ export const DivisionesTable = ({ data, refresh }: DivisionesTableProps) => {
               <>
                 {/* Aquí puedes agregar botones o acciones relacionadas con la división */}
                 <EditDivisionModal divisionId={original.id} />
-                <RemoveDivisionModal divisionId={original.id} nombre={original.nombre} onSubmit={refresh} />
+                <RemoveDivisionModal divisionId={original.id} nombre={original.nombre} onSubmit={onDeleteDivision} />
               </>
             );
           },
-        }}
-      />
-
-      <DataTablePaginationStandalone
-        pageIndex={0} // Cambia esto a pagination.pageIndex si usas paginación
-        pageSize={10} // Cambia esto a pagination.pageSize si usas paginación
-        rowCount={data.length} // Cambia esto si tienes una propiedad count en tus datos
-        onChange={({ pageIndex, pageSize }) => {
-          // Aquí maneja la lógica de paginación
-          console.log("Página:", pageIndex, "Tamaño de página:", pageSize);
-          // Puedes actualizar el estado de paginación aquí
         }}
       />
     </>

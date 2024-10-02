@@ -119,7 +119,7 @@ export const EQUIPOS_ROUTE: AppRoute = {
   ],
 };
 
-export const CURSOS_ROUTE: AppRoute = {
+export const CURSOS_ROUTE = {
   href: "/cursos",
   label: "Cursos",
   isPublic: false,
