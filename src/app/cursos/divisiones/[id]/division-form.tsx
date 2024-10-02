@@ -95,8 +95,13 @@ export const DivisionForm = ({ id, onSubmit, onCancel }: Props) => {
           <div className="flex w-full flex-col items-center justify-center">
             <div className="flex flex-col space-y-4 px-0 md:px-6">
               <div className="flex w-full flex-row lg:flex-row lg:justify-between lg:gap-x-4">
+                {/* Campo para el nombre de la división */}
                 <div className="mt-4 w-full">
                   <FormInput label={"Nombre"} control={control} name="nombre" type={"text"} className="mt-2" />
+                </div>
+                {/* Campo para el año de la división */}
+                <div className="mt-4 w-full">
+                  <FormInput label={"Año"} control={control} name="anio" type={"number"} className="mt-2" />
                 </div>
               </div>
             </div>
