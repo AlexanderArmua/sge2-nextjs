@@ -9,6 +9,8 @@ import { type SortingState } from "@tanstack/react-table";
 import RemoveDivisionModal from "./remove-division";
 import EditDivisionModal from "./edit-division";
 import { useRouter } from "next/navigation";
+import React from "react";
+
 type DivisionData = RouterOutputs["division"]["getAll"]; // Cambia esto según tu API
 
 type DivisionesTableProps = {
@@ -32,7 +34,7 @@ export const DivisionesTable = ({ data }: DivisionesTableProps) => {
             return (
               <>
                 {/* Aquí puedes agregar botones o acciones relacionadas con la división */}
-                <EditDivisionModal divisionId={original.id} />
+                <EditDivisionModal divisionId={original.id.toString()} />
                 <RemoveDivisionModal divisionId={original.id} nombre={original.nombre} onSubmit={onDeleteDivision} />
               </>
             );

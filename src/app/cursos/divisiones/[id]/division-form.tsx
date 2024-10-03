@@ -99,9 +99,31 @@ export const DivisionForm = ({ id, onSubmit, onCancel }: Props) => {
                 <div className="mt-4 w-full">
                   <FormInput label={"Nombre"} control={control} name="nombre" type={"text"} className="mt-2" />
                 </div>
-                {/* Campo para el año de la división */}
                 <div className="mt-4 w-full">
-                  <FormInput label={"Año"} control={control} name="anio" type={"number"} className="mt-2" />
+                  <label className="block text-sm font-medium text-gray-700">Año</label>
+                  <select
+                    {...formHook.register("anio", {
+                      required: "Debes seleccionar un año", // Validación requerida
+                      valueAsNumber: true, // Convierte a número
+                      validate: (value) =>
+                        typeof value === "number" && value >= 1 && value <= 6 ? true : "Selecciona un año válido", // Valida que sea entre 1 y 6
+                    })}
+                    className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  >
+                    <option value="">Seleccionar año</option>
+                    {/* Valor inválido */}
+                    <option value={1}>1</option>
+                    <option value={2}>2</option>
+                    <option value={3}>3</option>
+                    <option value={4}>4</option>
+                    <option value={5}>5</option>
+                    <option value={6}>6</option>
+                  </select>
+                  {formHook.formState.errors.anio && (
+                    <span className="text-red-500">
+                      {formHook.formState.errors.anio.message ?? "El año es requerido"}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>

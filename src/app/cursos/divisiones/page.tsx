@@ -4,7 +4,7 @@ import DivisionesTableContainer from "./_components/divisiones-table-container";
 import LoadingDivisionesTable from "./_components/loading-division-table"; // Puedes crear uno específico para divisiones si es necesario
 import { inputGetDivisiones } from "@/shared/filters/divisiones-filter.schema"; // Un schema de filtros para divisiones
 import { ActionButtons } from "./_components/action-buttons";
-
+import React from "react";
 type PageProps = {
   searchParams: ReadonlyURLSearchParams;
 };

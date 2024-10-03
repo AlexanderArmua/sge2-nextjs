@@ -3,7 +3,12 @@ import { z } from "zod";
 // Esquema para agregar una división
 export const inputAgregarDivision = z.object({
   nombre: z.string().min(1, { message: "Requerido" }).max(5, { message: "No debe superar 5 caracteres" }),
-  anio: z.number().optional(), // Hazlo opcional si no siempre se proporciona
+  anio: z
+    .number()
+    .min(1, "El año debe ser al menos 1")
+    .max(6, "El año debe ser como máximo 6")
+    .int("El año debe ser un número entero")
+    .optional(), // Hazlo opcional si no siempre se proporciona
 });
 
 // Esquema para obtener todas las divisiones con paginación y filtros
