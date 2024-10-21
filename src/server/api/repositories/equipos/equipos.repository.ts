@@ -4,6 +4,8 @@ import {
   type inputAgregarEquipo,
   type inputGetEquipo,
   type inputGetEquipos,
+  type inputGetArmarios,
+  type inputAgregarMarca,
 } from "@/shared/filters/equipos-filter.schema";
 import { Prisma, type PrismaClient } from "@prisma/client";
 import { type z } from "zod";
@@ -254,15 +256,21 @@ export const getAllEstados = async (ctx: { db: PrismaClient }) => {
   return estados;
 };
 
-export const getAllArmarios = async (ctx: { db: PrismaClient }) => {
+type InputGetAllArmarios = z.infer<typeof inputGetArmarios>;
+export const getAllArmarios = async (ctx: { db: PrismaClient }, input: InputGetAllArmarios) => {
+  const { laboratorioId } = input;
+
   const armarios = await ctx.db.armario.findMany({
-    orderBy: {
-      nombre: "asc",
-    },
     select: {
       id: true,
       nombre: true,
       laboratorio: true,
+    },
+    where: {
+      laboratorioId: laboratorioId,
+    },
+    orderBy: {
+      nombre: "asc",
     },
   });
 
@@ -283,4 +291,43 @@ export const getAllModelos = async (ctx: { db: PrismaClient }) => {
   });
 
   return modelos;
+};
+
+type InputAgregarMarca = z.infer<typeof inputAgregarMarca>;
+export const agregarMarca = async (ctx: { db: PrismaClient }, input: InputAgregarMarca, userId: string) => {
+  try {
+    const nuevaMarca = await ctx.db.$transaction(async (tx) => {
+      const existeMarca = await ctx.db.equipoMarca.findFirst({
+        where: {
+          nombre: {
+            equals: input.nombre,
+            mode: "insensitive",
+          },
+        },
+      });
+
+      if (existeMarca) {
+        throw new Error("El nombre de la marca ya existe");
+      }
+
+      const marca = await tx.equipoMarca.create({
+        data: {
+          nombre: input.nombre,
+          usuarioCreadorId: userId,
+        },
+      });
+
+      return marca;
+    });
+
+    return nuevaMarca;
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        throw new Error("Ocurrió un error al agregar la marca, intente agregarlo de nuevo");
+      }
+    }
+
+    throw new Error("Error agregando marca");
+  }
 };

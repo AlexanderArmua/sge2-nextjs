@@ -18,7 +18,6 @@ export default function PrestarEquipoModal({ equipoId }: PrestarEquipoModalProps
   const [open, setOpen] = useState(false);
 
   const handleSubmit = () => setOpen(false);
-
   const handleCancel = () => setOpen(false);
 
   return (

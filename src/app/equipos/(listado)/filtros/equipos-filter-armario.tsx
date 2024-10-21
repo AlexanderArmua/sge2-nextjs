@@ -16,11 +16,11 @@ type Props = {
 };
 
 export const EquiposFilterArmario = ({ filters }: Props) => {
-  const { armario, onArmarioChange } = useEquiposQueryParam(filters);
+  const { armario, laboratorio, onArmarioChange } = useEquiposQueryParam(filters);
 
   const [query, setQuery] = useState("");
 
-  const { data, isLoading, isError } = api.equipos.getAllArmarios.useQuery();
+  const { data, isLoading, isError } = api.equipos.getAllArmarios.useQuery({ laboratorioId: Number(laboratorio) });
 
   const armarios = useMemo(() => {
     if (!data) return [];
@@ -82,6 +82,7 @@ export const EquiposFilterArmario = ({ filters }: Props) => {
           </div>
         }
         className={""}
+        disabled={!laboratorio}
         onQueryChange={setQuery}
         isLoading={isLoading}
         placeholder="Buscar por armario"

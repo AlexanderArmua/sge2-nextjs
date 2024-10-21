@@ -7,6 +7,7 @@ import {
 } from "@/shared/filters/equipos-tipos-filter.schema";
 import {
   agregarEquipo,
+  agregarMarca,
   editarEquipo,
   eliminarEquipo,
   getAllArmarios,
@@ -20,8 +21,10 @@ import { protectedProcedure } from "../../trpc";
 import { validarInput } from "../helper";
 import {
   inputAgregarEquipo,
+  inputAgregarMarca,
   inputEditarEquipos,
   inputEliminarEquipo,
+  inputGetArmarios,
   inputGetEquipo,
   inputGetEquipos,
 } from "@/shared/filters/equipos-filter.schema";
@@ -135,8 +138,10 @@ export const getTodosLosEstadosProcedure = protectedProcedure.query(async ({ ctx
   return estados;
 });
 
-export const getTodosLosArmariosProcedure = protectedProcedure.query(async ({ ctx }) => {
-  const armarios = await getAllArmarios(ctx);
+export const getTodosLosArmariosProcedure = protectedProcedure.input(inputGetArmarios).query(async ({ ctx, input }) => {
+  validarInput(inputGetArmarios, input);
+
+  const armarios = await getAllArmarios(ctx, input);
 
   return armarios;
 });
@@ -145,4 +150,14 @@ export const getTodosLosModelosProcedure = protectedProcedure.query(async ({ ctx
   const modelos = await getAllModelos(ctx);
 
   return modelos;
+});
+
+export const nuevaMarcaProcedure = protectedProcedure.input(inputAgregarMarca).mutation(async ({ ctx, input }) => {
+  validarInput(inputAgregarMarca, input);
+
+  const userId = ctx.session.user.id;
+
+  const marca = await agregarMarca(ctx, input, userId);
+
+  return marca;
 });
